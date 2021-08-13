@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Tourist\TouristController;
 use App\Http\Controllers\Tourist\AuthController;
+use App\Http\Controllers\Tourist\ForgetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ use App\Http\Controllers\Tourist\AuthController;
 
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
+Route::post('/forgot-password',[ForgetPasswordController::class,'forgotPassword']);
 Route::get('/login',function()
 {
     return response()->json([
