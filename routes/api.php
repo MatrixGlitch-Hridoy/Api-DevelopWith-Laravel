@@ -24,6 +24,7 @@ use App\Http\Controllers\Tourist\ForgetPasswordController;
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/forgot-password',[ForgetPasswordController::class,'forgotPassword']);
+Route::post('/reset-password',[ForgetPasswordController::class,'resetPassword']);
 Route::get('/login',function()
 {
     return response()->json([
@@ -33,8 +34,9 @@ Route::get('/login',function()
 })->name('login');
 Route::middleware('auth:api')->group(function()
 {
+    Route::get('/tourist',[TouristController::class,'currentUser']);
     Route::post('/logout',[AuthController::class,'logout']);
-    Route::resource('/tourist',TouristController::class);
+    Route::resource('/tourist',TouristController::class)->except('index');
 });
 
 

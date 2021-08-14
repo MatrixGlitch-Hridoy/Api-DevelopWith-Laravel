@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tourist;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 use DB;
@@ -54,8 +55,48 @@ class ForgetPasswordController extends Controller
                 'message'=>'Email Not Found'
             ],404);
         }
-        
-        
-        
+       
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'token'=>'required',
+            'email'=>'required|email',
+            'password'=>'required',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success'=>false,
+                "errors"=>$validator->errors()
+            ],401);
+        }
+
+        $email = $request->email;
+        $token = $request->token;
+        $password = Hash::make($request->password);
+
+        $emailCheck = DB::table('password_resets')->where('email',$email)->first();
+        $tokenCheck = DB::table('password_resets')->where('token',$token)->first();
+
+        if(!$emailCheck)
+        {
+            return response([
+                'message'=>'Email Not Found'
+            ],401);
+        }
+        if(!$tokenCheck)
+        {
+            return response([
+                'message'=>'Invalid Token'
+            ],401);
+        }
+
+        DB::table('users')->where('email',$email)->update(['password'=>$password]);
+        DB::table('password_resets')->where('email',$email)->delete();
+
+        return response([
+            'message'=>'Password Reset Successfully'
+        ],200);
     }
 }

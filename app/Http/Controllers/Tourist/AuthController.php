@@ -75,6 +75,12 @@ class AuthController extends Controller
                 'data' => $data
             ]);
         }
+        else{
+            return response()->json([
+                'success'=>false,
+                "message"=>'invalid email or password'
+            ],401);
+        }
     }
     
     public function logout(Request $request)

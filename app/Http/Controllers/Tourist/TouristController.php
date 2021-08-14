@@ -161,5 +161,10 @@ class TouristController extends Controller
             ]);
         }
     }
+
+    public function currentUser()
+    {
+        return Auth::user();
+    }
 }
 
